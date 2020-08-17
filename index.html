@@ -24,17 +24,18 @@
       const naranja = document.getElementById('naranja');
       const verde = document.getElementById('verde');
       const btnEmpezar = document.getElementById('btnEmpezar');
-      const ULTIMO_NIVEL = 10;
+      const ULTIMO_NIVEL = 20;
 
       class Juego {
         constructor() {
+          this.inicializar = this.inicializar.bind(this);
           this.inicializar();
           this.generarSecuencia();
           setTimeout(this.siguienteNivel, 500);
         }
 
         inicializar() {
-          btnEmpezar.classList.add('hide');
+          this.toogle();
           this.siguienteNivel = this.siguienteNivel.bind(this);
           this.elegirColor = this.elegirColor.bind(this);
           this.nivel = 1;
@@ -44,6 +45,14 @@
             naranja,
             verde,
           };
+        }
+
+        toogle() {
+          if (btnEmpezar.classList.contains('hide')) {
+            btnEmpezar.classList.add('hide');
+          } else {
+            btnEmpezar.classList.remove('hide');
+          }
         }
 
         generarSecuencia() {
@@ -124,14 +133,25 @@
               this.nivel++;
               this.eliminarClick();
               if (this.nivel === ULTIMO_NIVEL + 1) {
-                //gano
+                this.gano();
               } else {
                 setTimeout(this.siguienteNivel, 1500);
               }
             }
           } else {
-            //perdio
+            this.perdio();
           }
+        }
+
+        gano() {
+          swal('Platzi', 'Bien!', 'success').then(this.inicializar);
+        }
+
+        perdio() {
+          swal('Platzi', 'Intenta de nuevo :D', 'error').then(() => {
+            this.eliminarClick();
+            this.inicializar();
+          });
         }
       }
 
